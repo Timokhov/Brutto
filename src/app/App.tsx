@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from '../assets/logo.svg';
-import classes from './App.module.scss';
+import { Switch, Route } from 'react-router-dom';
+import { AvailableUrls } from './utils/constants';
+import RouteRedirect from './screens/RouteRedirect/RouteRedirect';
+import AuthenticationPlaceholder from './screens/Authentication/placeholder/AutheticationPlaceholder';
+import { Grid } from '@material-ui/core';
+import { useAppStyles } from './App.styles';
 
-function App() {
-  return (
-    <div className={ classes.App }>
-      <header className={ classes.AppHeader }>
-        <img src={ logo } className={ classes.AppLogo } alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className={ classes.AppLink }
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const Authentication = React.lazy(() => {
+    return import('./screens/Authentication/Authentication');
+});
+
+const App = () => {
+    const classes = useAppStyles();
+    return (
+        <Grid container className={ classes.appGrid }  direction="column" justify="center" alignItems="center">
+            <Grid item className={ classes.content }>
+                <Switch>
+                    <Route path={AvailableUrls.AUTHENTICATION} component={(props: any) => (
+                        <React.Suspense fallback={<AuthenticationPlaceholder/>}>
+                            <Authentication {...props}/>
+                        </React.Suspense>
+                    )}/>
+                    <Route path="/" component={RouteRedirect}/>
+                </Switch>
+            </Grid>
+        </Grid>
+    );
 }
 
 export default App;
