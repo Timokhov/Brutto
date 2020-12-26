@@ -9,28 +9,32 @@ import { ThemeProvider, createMuiTheme, CssBaseline } from '@material-ui/core';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 import teal from '@material-ui/core/colors/teal';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { Provider } from 'react-redux';
+import { store } from './app/store/store';
 
 const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: blueGrey[600],
-        },
-        secondary: {
-            main: teal[300],
-            contrastText: '#fff'
-        }
+  palette: {
+    primary: {
+      main: blueGrey[600],
     },
+    secondary: {
+      main: teal[300],
+      contrastText: '#fff'
+    }
+  },
 });
 
 const app = (
-    <React.StrictMode>
-        <ThemeProvider theme={ theme }>
-            <BrowserRouter>
-                <CssBaseline/>
-                <App/>
-            </BrowserRouter>
-        </ThemeProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <CssBaseline/>
+          <App/>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>
 );
 
 ReactDOM.render(app, document.getElementById('root'));
