@@ -1,14 +1,17 @@
 import { createStore, combineReducers, Reducer, CombinedState, Store, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import authReducer, { AuthState } from './auth/reducer';
+import usersReducer, { UsersState } from './users/reducer';
 
 export interface RootState {
-  authState: AuthState
+  authState: AuthState,
+  usersState: UsersState
 }
 
 const rootReducer: Reducer<CombinedState<RootState>> = combineReducers(
   {
-    authState: authReducer
+    authState: authReducer,
+    usersState: usersReducer
   }
 );
 

@@ -10,9 +10,13 @@ export const authenticate = (username: string, password: string): ThunkAction<vo
     dispatch(AuthActions.authStart());
     setTimeout(() => {
       dispatch(AuthActions.authSuccess({
-        name: username
+        id: '123',
+        name: username,
+        email: 'email@email.com',
+        age: 25,
+        isAdmin: true
       }));
-      HistoryService.push(AvailableUrls.MY_TRAINING);
+      HistoryService.push(AvailableUrls.USERS);
     }, 500);
   };
 };

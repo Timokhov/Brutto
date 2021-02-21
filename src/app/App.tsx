@@ -11,9 +11,10 @@ import Header from './components/Header/Header';
 import SchedulePlaceholder from './screens/Schedule/placeholder/SchedulePlaceholder';
 import PersonalRecordsPlaceholder from './screens/PersonalRecords/placeholder/PersonalRecordsPlaceholder';
 import BottomNav from './components/Navigation/BottomNav/BottomNav';
-import { useIsMobile } from './hooks/useIsMobile';
+import { useIsMobile } from './hooks/mobile/hooks';
 import { useHistory } from 'react-router-dom';
 import * as HistoryService from './services/history/history.service';
+import UsersPlaceholder from './screens/Users/placeholder/UsersPlaceholder';
 
 const Authentication = React.lazy(() => {
   return import('./screens/Authentication/Authentication');
@@ -31,11 +32,18 @@ const PersonalRecords = React.lazy(() => {
   return import('./screens/PersonalRecords/PersonalRecords');
 });
 
+const Users = React.lazy(() => {
+  return import('./screens/Users/Users');
+});
+
 const App = () => {
   const classes = useAppStyles();
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.authState.userInfo !== null
+  );
+  const isAdmin = useSelector(
+    (state: RootState) => state.authState.userInfo?.isAdmin
   );
   const isMobile = useIsMobile();
   const history = useHistory()
@@ -43,6 +51,36 @@ const App = () => {
   useEffect(() => {
     HistoryService.init(history);
   }, [history]);
+
+  const appRoutes = (
+    <>
+      <Route path={AvailableUrls.MY_TRAINING} render={(props: any) => (
+        <React.Suspense fallback={<MyTrainingPlaceholder/>}>
+          <MyTraining {...props}/>
+        </React.Suspense>
+      )}/>
+      <Route path={AvailableUrls.SCHEDULE} render={(props: any) => (
+        <React.Suspense fallback={<SchedulePlaceholder/>}>
+          <Schedule {...props}/>
+        </React.Suspense>
+      )}/>
+      <Route path={AvailableUrls.PERSONAL_RECORDS} render={(props: any) => (
+        <React.Suspense fallback={<PersonalRecordsPlaceholder/>}>
+          <PersonalRecords {...props}/>
+        </React.Suspense>
+      )}/>
+    </>
+  );
+
+  const adminRoutes = (
+    <>
+      <Route path={AvailableUrls.USERS} render={(props: any) => (
+        <React.Suspense fallback={<UsersPlaceholder/>}>
+          <Users {...props}/>
+        </React.Suspense>
+      )}/>
+    </>
+  );
 
   return (
     <div className={classes.appContainer}>
@@ -60,24 +98,7 @@ const App = () => {
             )}/>
           }
           {
-            isAuthenticated &&
-            <>
-                <Route path={AvailableUrls.MY_TRAINING} render={(props: any) => (
-                  <React.Suspense fallback={<MyTrainingPlaceholder/>}>
-                    <MyTraining {...props}/>
-                  </React.Suspense>
-                )}/>
-                <Route path={AvailableUrls.SCHEDULE} render={(props: any) => (
-                  <React.Suspense fallback={<SchedulePlaceholder/>}>
-                    <Schedule {...props}/>
-                  </React.Suspense>
-                )}/>
-                <Route path={AvailableUrls.PERSONAL_RECORDS} render={(props: any) => (
-                  <React.Suspense fallback={<PersonalRecordsPlaceholder/>}>
-                    <PersonalRecords {...props}/>
-                  </React.Suspense>
-                )}/>
-            </>
+            isAuthenticated && (isAdmin ? adminRoutes : appRoutes)
           }
           <Route path={AvailableUrls.DEFAULT} component={RouteRedirect}/>
         </Switch>

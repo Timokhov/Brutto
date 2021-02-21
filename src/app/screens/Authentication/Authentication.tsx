@@ -24,7 +24,7 @@ const Authentication = () => {
   const submit = useCallback((event: React.FormEvent) => {
     dispatch(authenticate(email, password));
     event.preventDefault();
-  }, [email, password]);
+  }, [email, password, dispatch]);
 
   return (
     <div className={classes.authentication}>

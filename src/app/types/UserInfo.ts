@@ -1,3 +1,10 @@
+import { UsersGroup } from './UsersGroup';
+
 export interface UserInfo {
-  name: string
+  id: string,
+  name: string,
+  email: string,
+  age: number,
+  group?: UsersGroup,
+  isAdmin?: boolean
 }

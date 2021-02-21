@@ -1,12 +1,12 @@
 import { makeStyles } from '@material-ui/core';
-import { useIsMobile } from '../../hooks/useIsMobile';
 
 export const useHeaderStyles = () => {
-  const isMobile = useIsMobile();
-
   return makeStyles(theme => ({
     logo: {
-      width: isMobile ? '4em' : '5em'
+      width: '4em'
+    },
+    toolbar: {
+      minHeight: '48px'
     },
     navigation: {
       width: '100%',
